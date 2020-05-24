@@ -77,5 +77,5 @@ export const registerValidations = yup.object().shape({
     aditionalInformation: yup.string().required(),
     service: yup.string().matches(onlyNumberReg).required(),
     paymentOptions: yup.string().matches(onlyNumberReg).required(),
-    aditionalInstructions: yup.string().required(),
+    aditionalInstructions: yup.string(),
   })

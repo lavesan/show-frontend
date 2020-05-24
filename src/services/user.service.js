@@ -6,8 +6,8 @@ class UserService {
         return axios.post('/utils', body);
     }
 
-    list() {
-        return axios.get('/utils');
+    list(filter = []) {
+        return axios.post('/utils/list', filter);
     }
 
 }

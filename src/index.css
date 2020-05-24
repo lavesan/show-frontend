@@ -11,3 +11,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+label {
+  color: #198b8b;
+  font-weight: bolder;
+}
+
+.form-check label {
+  font-weight: 300;
+}

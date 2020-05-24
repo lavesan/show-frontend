@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Formik } from 'formik';
 import Modal from "react-responsive-modal";
-import { Dimmer, Loader, Image, Segment } from 'semantic-ui-react';
+import { Dimmer, Loader, Segment } from 'semantic-ui-react';
 
 import { StyledRegisterPage, StyledLoadingModal } from './register.styles';
 import { registerValidations } from './register.validations';
