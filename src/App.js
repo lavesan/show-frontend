@@ -1,6 +1,8 @@
 import React from 'react';
 import { Route, BrowserRouter as Router, Switch, Redirect } from "react-router-dom";
 import axios from 'axios';
+import 'react-responsive-modal/styles.css';
+import 'semantic-ui-css/semantic.min.css';
 
 import { ListPage } from './pages/list';
 import { RegisterPage } from './pages/register';
