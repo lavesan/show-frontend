@@ -179,3 +179,20 @@ export const cepMask = value => {
   return finalValue;
 
 }
+
+export const dateMask = value => {
+
+  const onlyNumber = value.replace(/\D/g, '');
+  const slicedDate = onlyNumber.slice(0, 8);
+
+  let finalValue = '';
+  for (let i = 0; i < slicedDate.length; i++) {
+    if (i === 2 || i === 4) {
+      finalValue += `/${slicedDate[i]}`;
+    } else {
+      finalValue += `${slicedDate[i]}`;
+    }
+  }
+  return finalValue;
+
+}

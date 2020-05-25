@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { AgGridReact } from '@ag-grid-community/react';
 import { AllCommunityModules } from '@ag-grid-community/all-modules';
 import { Dimmer, Loader, Segment } from 'semantic-ui-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import moment from 'moment';
 
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
@@ -25,7 +26,12 @@ export default () => {
     const columnDefs                        = [
         { headerName: 'Nome', field: 'name' },
         { headerName: 'Email', field: 'email' },
-        { headerName: 'Data', field: 'data' },
+        { headerName: 'Data', field: 'data', cellRenderer({ data }) {
+            
+            const momentDate = moment(data.data, 'YYYY-MM-DD');
+            return momentDate.isValid() ? momentDate.format('DD/MM/YYYY') : '';
+
+        } },
         { headerName: 'Telefone 1', field: 'tel1', cellRenderer({ data }) {
             return `+${data.ddi1} ${data.tel1}`;
         } },

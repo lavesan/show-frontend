@@ -1,25 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Formik } from 'formik';
 import Modal from "react-responsive-modal";
 import { Dimmer, Loader, Segment } from 'semantic-ui-react';
 
 import { StyledRegisterPage, StyledLoadingModal } from './register.styles';
 import { registerValidations } from './register.validations';
-import { cpfMask, onlyCharactersMask, onlyNumberMask, onlyCharactersWithSpaceMask } from '../../helpers/masks.helpers';
+import { cpfMask, onlyCharactersMask, onlyNumberMask, onlyCharactersWithSpaceMask, dateMask } from '../../helpers/masks.helpers';
 import { initialRegisterFields } from '../../helpers/register.helpers';
+import { isValidDate } from '../../helpers/validations.helpers';
 import userInstance from '../../services/user.service';
 import countriesDDI from '../../countries-ddi.json';
 
 export default () => {
 
-    const [form, setForm]         = useState(initialRegisterFields);
-    const [progress, setProgress] = useState({
+    const [form, setForm]                   = useState(initialRegisterFields);
+    const [progress, setProgress]           = useState({
         show: false,
         loading: false,
         error: false,
     });
-    const [ddis, setDdis]         = useState([]);
-    const userService             = userInstance.getInstance();
+    const [ddis, setDdis]                   = useState([]);
+    const [invalidateDate, setInvalidDate]  = useState(false);
+    const userService                       = userInstance.getInstance();
 
     const save = (formik) => {
 
@@ -49,6 +51,14 @@ export default () => {
 
     const onMaskChange = ({ e, maskMethod, setFieldValue }) => {
         setFieldValue(e.target.name, maskMethod(e.target.value));
+
+        if (e.target.name === 'data') {
+            // console.log('valido: ', isValidDate(e.target.value));
+            // setInvalidDate(e.target.value
+            //         ? isValidDate(e.target.value)
+            //         : false
+            // );
+        }
     }
 
     const toggleModal = () => {
@@ -79,6 +89,7 @@ export default () => {
                     <Formik enableReinitialize={true} initialValues={form} onSubmit={save} validationSchema={registerValidations}>
                         {({ handleChange, handleSubmit, values, setFieldValue, errors }) => (
                             <form onSubmit={handleSubmit} className="row">
+                                {JSON.stringify(errors)}
                                 <div className="form-group col-12">
                                     <label htmlFor="name">Nome Completo <span className="text-danger">*</span></label>
                                     <input type="text" name="name" value={values.name} onChange={e => onMaskChange({ setFieldValue, e, maskMethod: onlyCharactersWithSpaceMask })} className={`form-control ${errors.name && 'is-invalid'}`} id="name" />
@@ -89,7 +100,7 @@ export default () => {
                                 </div>
                                 <div className="form-group col-12">
                                     <label htmlFor="data">Data</label>
-                                    <input type="text" name="data" value={values.data} onChange={handleChange} className={`form-control ${errors.data && 'is-invalid'}`} id="data" />
+                                    <input type="date" name="data" value={values.data} onChange={handleChange} className={`form-control ${errors.data || invalidateDate && 'is-invalid'}`} id="data" />
                                 </div>
                                 <div className="form-group col-12 col-sm-6">
                                     <label htmlFor="tel1">Telefone 1 <span className="text-danger">*</span></label>
@@ -272,17 +283,19 @@ export default () => {
             </Segment>
             <Modal open={progress.show} onClose={toggleModal} closeOnOverlayClick={false} center>
                 <StyledLoadingModal>
-                    <Dimmer active={progress.loading} inverted>
-                        <Loader inverted content='Loading' />
-                    </Dimmer>
-                    {!progress.loading && (
-                        <>
-                            {progress.error
-                                ? <p className="text-danger">Aconteceu um erro no servidor. Por favor tente mais tarde.</p>
-                                : <p className="text-success">Dados cadastrados com sucesso!</p>
-                            }
-                        </>
-                    )}
+                    <Segment>
+                        <Dimmer active={progress.loading} inverted>
+                            <Loader inverted content='Loading' />
+                        </Dimmer>
+                        {!progress.loading && (
+                            <>
+                                {progress.error
+                                    ? <p className="text-danger">Aconteceu um erro no servidor. Por favor tente mais tarde.</p>
+                                    : <p className="text-success">Dados cadastrados com sucesso!</p>
+                                }
+                            </>
+                        )}
+                    </Segment>
                 </StyledLoadingModal>
             </Modal>
         </StyledRegisterPage>
