@@ -89,7 +89,6 @@ export default () => {
                     <Formik enableReinitialize={true} initialValues={form} onSubmit={save} validationSchema={registerValidations}>
                         {({ handleChange, handleSubmit, values, setFieldValue, errors }) => (
                             <form onSubmit={handleSubmit} className="row">
-                                {JSON.stringify(errors)}
                                 <div className="form-group col-12">
                                     <label htmlFor="name">Nome Completo <span className="text-danger">*</span></label>
                                     <input type="text" name="name" value={values.name} onChange={e => onMaskChange({ setFieldValue, e, maskMethod: onlyCharactersWithSpaceMask })} className={`form-control ${errors.name && 'is-invalid'}`} id="name" />
